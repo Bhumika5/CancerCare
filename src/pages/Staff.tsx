@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,12 +20,14 @@ import {
   Phone,
   User,
   Clock,
-  Building
+  Building,
+  LogOut
 } from 'lucide-react';
 
 const API_URL = 'http://localhost:3000/camps';
 
 const Staff = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('camps');
   const [camps, setCamps] = useState([]);
@@ -42,6 +45,15 @@ const Staff = () => {
     slots: '',
     type: ''
   });
+
+  // Check staff authentication
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('staffAuthenticated');
+    if (!isAuthenticated) {
+      navigate('/staff-login');
+      return;
+    }
+  }, [navigate]);
 
   // Fetch camps from backend on component mount
   useEffect(() => {
@@ -173,14 +185,36 @@ const Staff = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('staffAuthenticated');
+    localStorage.removeItem('staffLoginTime');
+    toast({
+      title: 'Logged Out',
+      description: 'You have been successfully logged out'
+    });
+    navigate('/staff-login');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <Navigation />
       
       <div className="max-w-6xl mx-auto p-6">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Staff Portal</h1>
-          <p className="text-gray-600">Manage cancer screening camps and bookings</p>
+        <div className="mb-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Staff Portal</h1>
+              <p className="text-gray-600">Manage cancer screening camps and bookings</p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={handleLogout}
+              className="flex items-center space-x-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </Button>
+          </div>
         </div>
 
         {/* Enhanced Tab Navigation */}

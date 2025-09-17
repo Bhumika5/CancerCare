@@ -11,6 +11,7 @@ import Booking from "./pages/Booking";
 import DataAnalytics from "./pages/DataAnalytics";
 import Prediction from "./pages/Prediction";
 import Staff from "./pages/Staff";
+import StaffLogin from "./pages/StaffLogin";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import PredictionImages from "./pages/PredictionImages";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/analytics" element={<DataAnalytics />} />
             <Route path="/prediction" element={<Prediction />} />
             <Route path="/staff" element={<Staff />} />
+            <Route path="/staff-login" element={<StaffLogin />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
